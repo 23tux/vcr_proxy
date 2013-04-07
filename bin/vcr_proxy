@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'vcr_proxy'
+
+# enable modifications to unparsed_uri
+class WEBrick::HTTPRequest
+  def unparsed_uri=(str)
+    @unparsed_uri = str
+  end
+end
+
+VCR.configure do |c|
+  c.hook_into :webmock
+  c.cassette_library_dir = 'cassettes'
+  c.default_cassette_options = { :record => :new_episodes }
+  c.ignore_localhost = true
+  c.ignore_hosts "127.0.0.1"
+end
+
+server = VCRProxy.new(:Port => 9999)
+trap("INT") { server.shutdown }
+server.start
