@@ -10,6 +10,9 @@ Gem::Specification.new do |s|
   s.summary     = ""
   s.description = ""
 
+  s.add_runtime_dependency 'capybara'
+  s.add_runtime_dependency 'poltergeist'
+
   s.required_rubygems_version = ">= 1.3.6"
 
   s.add_development_dependency 'guard',      '>= 1.6.2'
