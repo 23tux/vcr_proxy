@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'vcr_proxy'
+
+hash = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: vcr_proxy [options]"
+
+  opts.on('-c', '--cassettes CASSETTES', 'location of cassettes folder') do |r|
+    hash[:cassettes] = r
+  end
+
+  opts.on('-p', '--port PORT', 'VCRProxy server port') do |r|
+    hash[:port] = r.to_i
+  end
+end.parse!
+
+# enable modifications to unparsed_uri
+# FIXME - lets not open HTTPRequest class and do sth else instead
+class WEBrick::HTTPRequest
+  def unparsed_uri=(str)
+    @unparsed_uri = str
+  end
+end
+
+# FIXME - we don't want to have custom VCR configuration because most apps will
+# already have that. Or we should at least
+VCRProxy.configure(hash)
+
+server = VCRProxy.start({ :Port => hash[:port] })
+
+trap("INT") { server.shutdown }

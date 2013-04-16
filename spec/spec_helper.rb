@@ -1,0 +1,1 @@
+require 'vcr_proxy'
