@@ -39,6 +39,7 @@ module VCRProxy
         if Dependency.rails?
           Rails.logger
         else
+          require 'logger'
           Logger.new(STDOUT)
         end
       end
@@ -116,7 +117,7 @@ module VCRProxy
         Rails.root
       else
         require 'pathname'
-        path Pathname.new '/'
+        Pathname.new '/'
       end
     end
   end

@@ -29,6 +29,6 @@ end
 # already have that. Or we should at least
 VCRProxy.configure(hash)
 
-server = VCRProxy.start({ :Port => hash[:port] })
+server = VCRProxy.start_with_pid()
 
 trap("INT") { server.shutdown }
