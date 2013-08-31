@@ -1,0 +1,12 @@
+defaults: &defaults
+    proxy_port: <%= ENV['VCR_PROXY_PORT'] || 9774 %>
+    proxy_host: <%= ENV['VCR_PROXY_HOST'] || 'localhost' %>
+    vcr_library_dir: 'tmp/cassettes'
+    vcr_cassette: 'vcr_proxy_records'
+    pid_path: 'tmp/pids'
+    pid_name: 'vcr_proxy_server.pid'
+
+dev:
+    <<: *defaults
+    proxy_port: 7777
+    vcr_cassette: 'testy'

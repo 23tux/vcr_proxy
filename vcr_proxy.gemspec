@@ -12,6 +12,9 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'capybara'
   s.add_runtime_dependency 'poltergeist'
+  s.add_runtime_dependency 'vcr'
+  s.add_runtime_dependency 'settingslogic'
+  s.add_runtime_dependency 'webmock'
 
   s.required_rubygems_version = ">= 1.3.6"
 

@@ -7,9 +7,9 @@ require 'webrick/httpproxy'
 require 'vcr'
 
 require 'vcr_proxy/server'
-require 'vcr_proxy/constants'
 require 'vcr_proxy/dependency'
 require 'vcr_proxy/driver'
+require 'vcr_proxy/settings'
 
 if VCRProxy::Dependency.rails3?
   require 'vcr_proxy/railtie'
@@ -24,8 +24,6 @@ if VCRProxy::Dependency.rspec2?
 end
 
 module VCRProxy
-  include Constants
-
   class << self
     def prepare(opts = {})
       VCR.configure do |c|
@@ -46,11 +44,11 @@ module VCRProxy
     end
 
     def port
-      ENV['VCR_PROXY_PORT'] || VCRProxy::DEFAULT_PORT
+      Settings.proxy_port
     end
 
     def host
-      ENV['VCR_PROXY_HOST'] || VCRProxy::DEFAULT_HOST
+      Settings.proxy_host
     end
 
     # start http proxy server and write the pid under tmp/pids
@@ -58,13 +56,13 @@ module VCRProxy
       stop_with_pid
 
       Process.fork do
-        path = get_pid_root.join(VCRProxy::PID_FILE_PATH)
+        path = get_pid_root.join(Settings.pid_path)
         path.mkdir unless path.directory?
 
-        path = path.join(VCRProxy::PID_FILE_NAME)
+        path = path.join(Settings.pid_name)
 
         opts = {
-          :Port           => VCRProxy.port,
+          :Port           => Settings.proxy_port,
           :RequestTimeout => 300,
           :ProxyTimeout   => true,
         }
@@ -99,7 +97,7 @@ module VCRProxy
     def configure(opts = {})
       VCR.configure do |c|
         c.hook_into :webmock
-        c.cassette_library_dir = opts[:cassettes] ||= DEFAULT_CASSETTES
+        c.cassette_library_dir = Settings.vcr_library_dir 
         c.default_cassette_options = { :record => :new_episodes }
         c.ignore_localhost = true
         c.ignore_hosts "127.0.0.1"
@@ -109,7 +107,7 @@ module VCRProxy
     private
 
     def get_pid_path
-      get_pid_root.join(VCRProxy::PID_FILE_PATH).join(VCRProxy::PID_FILE_NAME)
+      get_pid_root.join(Settings.pid_path).join(Settings.pid_name)
     end
 
     def get_pid_root

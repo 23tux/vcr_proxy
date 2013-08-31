@@ -37,9 +37,8 @@ gem install vcr_proxy
 TODO: `Rspec` integration
 
 # Configuration
-TODO: Allow custom VCR configuration through VCRProxy so that people could use
-only VCRPRoxy ( without explicitly citing the vcr gem itself ). However we
-should respect any existing VCR configuration.
+VCRProxy can now be configured through a YAML config file (vcr_proxy.yml) that should be located in the current
+directory (or under the config directory if you are using rails)
 
 # Manual usage
 

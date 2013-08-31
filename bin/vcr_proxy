@@ -2,20 +2,29 @@
 
 require 'optparse'
 require 'vcr_proxy'
+require 'vcr_proxy/settings'
 
 hash = {}
 
 OptionParser.new do |opts|
   opts.banner = "Usage: vcr_proxy [options]"
 
+  opts.on('-n', '--namespace NAMESPACE', 'namespace from the config file that should be used') do |r|
+    Settings.namespace r
+  end
+
   opts.on('-c', '--cassettes CASSETTES', 'location of cassettes folder') do |r|
-    hash[:cassettes] = r
+	Settings.namespace 'defaults'
+    Settings["vcr_library_dir"] = r
   end
 
   opts.on('-p', '--port PORT', 'VCRProxy server port') do |r|
-    hash[:port] = r.to_i
+	Settings.namespace 'defaults'
+    Settings["proxy_port"] = r.to_i
   end
-end.parse!
+end.order!
+
+Settings.namespace 'defaults'
 
 # enable modifications to unparsed_uri
 # FIXME - lets not open HTTPRequest class and do sth else instead
@@ -25,9 +34,7 @@ class WEBrick::HTTPRequest
   end
 end
 
-# FIXME - we don't want to have custom VCR configuration because most apps will
-# already have that. Or we should at least
-VCRProxy.configure(hash)
+VCRProxy.configure
 
 server = VCRProxy.start_with_pid()
 

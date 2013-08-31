@@ -1,6 +1,7 @@
 source :rubygems
 
 gem 'vcr'
+gem 'settingslogic'
 
 group :development, :test do
   gem 'guard',        '>= 1.6.2'

@@ -102,7 +102,7 @@ module VCRProxy
     end
 
     def service(req, res)
-      ::VCR.use_cassette("vcr_proxy_records", :record => :new_episodes) do
+      ::VCR.use_cassette(Settings.vcr_cassette, :record => :new_episodes) do
         super(req, res)
       end
     end
