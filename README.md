@@ -14,8 +14,8 @@ be possible for VCR to record the request, when the proxy is written in Ruby.
 And so I did: VCRProxy is a proxy server based on WEBrick (which is included in ruby by default), that hooks 
 into the calls, records them with VCR and let VCR replay the records the second time.
 
-If you have SSL calls (and that is the tricky part), a second MITM proxy is started. You just have to ensure 
-that you ignore SSL errors/warnings in your application, because WEBrick generates a self-signed SSL certificate 
+If you have HTTPS calls (and that is the tricky part), a second MITM proxy is started. You just have to ensure 
+that you ignore HTTPS errors/warnings in your application, because WEBrick generates a self-signed HTTPS certificate 
 on the fly, and this certificate isn't signed.
 
 # Usage
@@ -49,7 +49,7 @@ If you want to mock out HTTPS calls, try this
 curl --proxy localhost:9999 --insecure https://blekko.com/ws/?q=rails+/json
 ```
 
-The `--insecure` option tells curl to ignore SSL warnings.
+The `--insecure` option tells curl to ignore HTTPS warnings.
 
 # Further Development
 
